@@ -1,3 +1,5 @@
+import Complejos
+
 --- longitud de una lista
 long :: [a] -> Int
 long [] = 0
@@ -39,6 +41,7 @@ esMultiplo19 :: [Int] -> Bool
 esMultiplo19 [x] = False
 esMultiplo19 (x:xs) = ((obtenerUltimo xs) * 2 + formarEnBase10 (x:eliminarUltimo xs)) `mod` 19 == 0
 
+-- funciones auxiliares para el ejercicio 3
 divisible :: Int -> Int -> Bool
 divisible x y = x `mod` y == 0
 
@@ -81,4 +84,10 @@ esSuma2Primos n [] = False
 esSuma2Primos n [x] = False
 esSuma2Primos n (x:xs) | esPrimo(n-x) = True
 		       | otherwise = esSuma2Primos n xs
+
+-- ejercicio 4
+-- al importar el modulo complejo, se puede hacer:
+-- elevarComplejo (C r i) n
+
+-- ejercicio 5
 
