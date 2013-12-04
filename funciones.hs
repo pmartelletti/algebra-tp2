@@ -89,5 +89,18 @@ esSuma2Primos n (x:xs) | esPrimo(n-x) = True
 -- al importar el modulo complejo, se puede hacer:
 -- elevarComplejo (C r i) n
 
--- ejercicio 5
+-- funciones auxiliares ejercicio 5
+mcd :: Int -> Int -> Int
+mcd 0 b = b
+mcd a b = mcd(b `mod` a) a
 
+euclides :: Int -> Int -> (Int, Int, Int)
+euclides 0 b = (b, 0, 1)
+euclides a b = (d, m - (b `div` a) * n, n)
+	where (d, n, m) = euclides (b `mod` a) a
+
+-- ejercicio 5
+existeSolucion :: [Int] -> Int -> Bool
+existeSolucion [x,y] c = divisible c d
+	where d = mcd x y
+existeSolucion (x:y:xs) c = existeSolucion ((mcd x y):xs) c
