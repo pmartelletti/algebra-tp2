@@ -18,6 +18,7 @@ obtenerUltimo :: [Int] -> Int
 obtenerUltimo [] = 0
 obtenerUltimo x = (x!!(long(x)-1))
 
+
 --- ejercicio 1
 esMultiplo17 :: [Int] -> Bool
 esMultiplo17 [x] = False
@@ -38,4 +39,46 @@ esMultiplo19 :: [Int] -> Bool
 esMultiplo19 [x] = False
 esMultiplo19 (x:xs) = ((obtenerUltimo xs) * 2 + formarEnBase10 (x:eliminarUltimo xs)) `mod` 19 == 0
 
+divisible :: Int -> Int -> Bool
+divisible x y = x `mod` y == 0
+
+divisores :: Int -> [Int]
+divisores x = [y | y <- [1..x], divisible x y ]
+
+esPrimo :: Int -> Bool
+esPrimo 2 = True
+esPrimo n = long(divisores n) == 2
+
+-- calcula los primos dentro del rango [Int] mediante la criba de eratotenes
+criba :: [Int] -> [Int]
+criba [] = []
+criba (n:ns) = n:criba(eliminarMultiplosDe n ns)
+
+-- elimina los multiplos de n que esten en la lista [Int]
+eliminarMultiplosDe :: Int -> [Int] -> [Int]
+eliminarMultiplosDe n [] = []
+eliminarMultiplosDe n (xs:s) | divisible xs n = eliminarMultiplosDe n s
+eliminarMultiplosDe n (xs:s) = (xs:eliminarMultiplosDe n s)
+
 -- ejercicio 3
+seCumpleGoldbachParaParesMenoresQue :: Int -> Bool
+-- mi caso base es 5, porque el menor entero para el que se cumple goldbach es 4
+seCumpleGoldbachParaParesMenoresQue 5 = True
+-- si no es numero par, entonces paso el proximo numero
+seCumpleGoldbachParaParesMenoresQue n | not (divisible n 2) = True && seCumpleGoldbachParaParesMenoresQue (n-1)
+-- si n e es par, me fijo si es suma de dos pares y si lo es, me fijo el proximo numero
+seCumpleGoldbachParaParesMenoresQue n = (esSuma2Primos n cribaEras) && seCumpleGoldbachParaParesMenoresQue (n-1)
+				where cribaEras = criba [2..n]
+-- podria preguntar si se cumple directamente para n-2, en vez de n-1, pero por como esta hecho el enunciado
+-- me pide para menores que n, y por tanto, mi caso base debe ser 5, y si pusiese n-2, nunca llegaria al caso
+-- base y por tanto entraria en un ciclo infinito
+
+
+-- se fija si n es suma de dos numero que estan en la lista
+-- el segundo parametro es una lista de primos
+esSuma2Primos :: Int -> [Int] -> Bool
+esSuma2Primos n [] = False
+esSuma2Primos n [x] = False
+esSuma2Primos n (x:xs) | esPrimo(n-x) = True
+		       | otherwise = esSuma2Primos n xs
+
